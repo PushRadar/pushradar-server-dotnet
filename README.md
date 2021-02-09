@@ -3,7 +3,7 @@
 <p align="center">
     <a href="https://www.nuget.org/packages/PushRadar"><img src="https://img.shields.io/nuget/v/pushradar?cacheSeconds=60&color=5b86e5"></a>
     <a href="https://www.nuget.org/packages/PushRadar"><img src="https://img.shields.io/nuget/dt/pushradar?cacheSeconds=60&color=5b86e5"></a>
-    <a href="https://www.nuget.org/packages/PushRadar"><img alt="GitHub" src="https://img.shields.io/badge/license-MIT-5b86e5"></a>
+    <a href="https://www.nuget.org/packages/PushRadar"><img src="https://img.shields.io/badge/license-MIT-5b86e5"></a>
 </p>
 <br />
 
