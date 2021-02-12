@@ -34,7 +34,7 @@ namespace PushRadar
             }
         }
 
-        public bool Broadcast(string channelName, object data)
+        public async Task<bool> BroadcastAsync(string channelName, object data)
         {
             channelName = channelName.Trim();
             if (channelName == "")
@@ -44,7 +44,7 @@ namespace PushRadar
 
             this.ValidateChannelName(channelName);
 
-            var response = this.DoHTTPRequest("POST", this.apiEndpoint + "/broadcasts", new Dictionary<string, object>
+            var response = await this.DoHTTPRequestAsync("POST", this.apiEndpoint + "/broadcasts", new Dictionary<string, object>
             {
                 { "channel", channelName },
                 { "data", data }
@@ -60,7 +60,7 @@ namespace PushRadar
             }
         }
 
-        public string Auth(string channelName)
+        public string Auth(string channelName, string socketID)
         {
             channelName = channelName.Trim();
             if (channelName == "")
@@ -73,8 +73,19 @@ namespace PushRadar
                 throw new Exception("Channel authentication can only be used with private channels.");
             }
 
-            Dictionary<string, object> response = this.DoHTTPRequest("GET", this.apiEndpoint + "/channels/auth?channel=" + Uri.EscapeDataString(channelName),
-                new Dictionary<string, object>());
+            socketID = socketID.Trim();
+            if (socketID == "")
+            {
+                throw new Exception("Socket ID empty. Please pass through a socket ID.");
+            }
+
+            var task = Task.Run(() => this.DoHTTPRequestAsync("GET", this.apiEndpoint + "/channels/auth?channel=" + Uri.EscapeDataString(channelName) + 
+                "&socketID=" + Uri.EscapeDataString(socketID),
+                new Dictionary<string, object>()));
+
+            task.Wait();
+
+            var response = task.Result;
 
             if ((int)response["status"] == 200)
             {
@@ -87,7 +98,7 @@ namespace PushRadar
 
         }
 
-        private Dictionary<string, object> DoHTTPRequest(string method, string url, Dictionary<string, object> data)
+        private async Task<Dictionary<string, object>> DoHTTPRequestAsync(string method, string url, Dictionary<string, object> data)
         {
             HttpClient client = new HttpClient();
             client.DefaultRequestHeaders.Add("X-PushRadar-Library", "pushradar-server-dotnet " + PushRadar.version);
@@ -99,17 +110,12 @@ namespace PushRadar
                 request.Content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
             }
 
-            var task = Task.Run(() => client.SendAsync(request));
-            task.Wait();
-
-            var response = task.Result;
-
-            var task2 = Task.Run(() => response.Content.ReadAsStringAsync());
-            task2.Wait();
+            var response = await client.SendAsync(request);
+            var body = await response.Content.ReadAsStringAsync();
 
             return new Dictionary<string, object>
             {
-                { "body", task2.Result },
+                { "body", body },
                 { "status", response.StatusCode }
             };
         }

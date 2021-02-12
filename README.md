@@ -32,8 +32,8 @@ $ Install-Package PushRadar
 
 ```csharp
 var radar = new PushRadar.PushRadar("your-secret-key");
-radar.Broadcast("channel-1", new Dictionary<string, object>() {
-    { "message", "Hello world!" }
+radar.BroadcastAsync("channel-1", new Dictionary<string, object>() {
+    { "message", "Hello world!" }
 });
 ```
 
@@ -57,10 +57,12 @@ You will need to set up an authentication endpoint that returns a token using th
 
 ```csharp
 var radar = new PushRadar.PushRadar("your-secret-key");
-var channelName = HttpContext.Current.Request.QueryString['channelName'];
+var channelName = HttpContext.Current.Request.QueryString["channelName"];
+var socketID = HttpContext.Current.Request.QueryString["socketID"];
+
 if (/* is user allowed to access channel? */ true) {
-    var kvp = new KeyValuePair<string, object>("token", radar.Auth(channelName));
-    return Json(kvp);
+    var kvp = new KeyValuePair<string, object>("token", radar.Auth(channelName, socketID));
+    return Json(kvp);
 }
 ```
 
@@ -76,5 +78,5 @@ Complete documentation for PushRadar's .NET server library can be found at: <htt
 
 ## License
 
-Copyright 2021, PushRadar. PushRadar's .NET server library is licensed under the MIT license:
-http://www.opensource.org/licenses/mit-license.php
+Copyright © 2021, PushRadar. PushRadar's .NET server library is licensed under the MIT license:
+<https://opensource.org/licenses/mit-license.php>
