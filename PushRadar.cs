@@ -10,15 +10,13 @@ namespace PushRadar
 {
     public class PushRadar
     {
-        private static readonly string version = "3.0.0-alpha.1";
+        private static readonly string version = "3.0.0";
         private readonly string apiEndpoint = "https://api.pushradar.com/v3";
         private string secretKey = null;
 
         public PushRadar(string secretKey)
         {
-            secretKey = secretKey.Trim();
-
-            if (secretKey == "" || !secretKey.StartsWith("sk_"))
+            if (secretKey == null || secretKey.Trim() == "" || !secretKey.StartsWith("sk_"))
                 throw new Exception("Please provide your PushRadar secret key. You can find it on the API page of your dashboard.");
 
             this.secretKey = secretKey;
@@ -36,8 +34,7 @@ namespace PushRadar
 
         public async Task<bool> BroadcastAsync(string channelName, object data)
         {
-            channelName = channelName.Trim();
-            if (channelName == "")
+            if (channelName == null || channelName.Trim() == "")
             {
                 throw new Exception("Channel name empty. Please provide a channel name.");
             }
@@ -62,8 +59,7 @@ namespace PushRadar
 
         public string Auth(string channelName, string socketID)
         {
-            channelName = channelName.Trim();
-            if (channelName == "")
+            if (channelName == null || channelName.Trim() == "")
             {
                 throw new Exception("Channel name empty. Please provide a channel name.");
             }
@@ -73,8 +69,7 @@ namespace PushRadar
                 throw new Exception("Channel authentication can only be used with private channels.");
             }
 
-            socketID = socketID.Trim();
-            if (socketID == "")
+            if (socketID == null || socketID.Trim() == "")
             {
                 throw new Exception("Socket ID empty. Please pass through a socket ID.");
             }

@@ -1,12 +1,6 @@
-## 3.0.0-alpha.3 (2021-02-17)
+## 3.0.0 (2021-02-18)
 
-[FIXED] Fixed problem regarding incorrect types of data
-
-## 3.0.0-alpha.2 (2021-02-09)
-
-[CHANGED] Changed Broadcast method into BroadcastAsync
-[NEW] Added async/await
-[CHANGED] Made channel authentication more secure
+[NEW] Updated for release of PushRadar v3
 
 ## 3.0.0-alpha.1 (2021-02-09)
 
