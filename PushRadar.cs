@@ -47,7 +47,7 @@ namespace PushRadar
             var response = await this.DoHTTPRequestAsync("POST", this.apiEndpoint + "/broadcasts", new Dictionary<string, object>
             {
                 { "channel", channelName },
-                { "data", data }
+                { "data", JsonConvert.SerializeObject(data) }
             });
 
             if ((int)response["status"] == 200)
