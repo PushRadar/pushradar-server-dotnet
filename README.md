@@ -72,9 +72,37 @@ Then register your authentication endpoint by calling the `auth(...)` method cli
 radar.auth('/auth');
 ```
 
+## Presence Channels
+
+Presence channels require authentication and start with the prefix **presence-**. Presence channels are eligible for 'presence messages' containing information about channel subscribers.
+
+You will need to set up an authentication endpoint as with private channels (see above). You should then register a `onPresence(...)` callback which will be called periodically. Your callback should accept two parameters: subscriber count and subscriber data. For example:
+
+```javascript
+radar.auth('/auth');
+radar.call.on.connection('/connected');
+
+radar.subscribe.to('presence-channel-1', function (data) {
+    console.log(data.message);
+}).onPresence(function (count, clientData) {
+    console.log(count);
+});
+```
+
+If you wish to pass through subscriber (client) data, you can set up an endpoint and pass its URL to the `call.on.connection(...)` method. Your endpoint will be called when a user first connects to the service. From your endpoint you can register client data as follows:
+
+```csharp
+var radar = new PushRadar.PushRadar("your-secret-key");
+var socketID = HttpContext.Current.Request.Form["socketID"];
+radar.RegisterClientDataAsync(socketID, new Dictionary<string, object>() {
+    { "##uniqueID", 1 },
+    { "name", "James Smith" }
+});
+```
+
 ## Complete Documentation
 
-Complete documentation for PushRadar's .NET server library can be found at: <https://pushradar.com/docs/3.x?lang=dotnet>
+Complete documentation for PushRadar's .NET server library can be found at: <https://pushradar.com/docs/3.x/dotnet>
 
 ## License
 

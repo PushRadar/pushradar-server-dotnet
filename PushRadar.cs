@@ -10,7 +10,7 @@ namespace PushRadar
 {
     public class PushRadar
     {
-        private static readonly string version = "3.0.0";
+        private static readonly string version = "3.1.0";
         private readonly string apiEndpoint = "https://api.pushradar.com/v3";
         private string secretKey = null;
 
@@ -64,9 +64,9 @@ namespace PushRadar
                 throw new Exception("Channel name empty. Please provide a channel name.");
             }
 
-            if (!channelName.StartsWith("private-"))
+            if (!(channelName.StartsWith("private-") || channelName.StartsWith("presence-")))
             {
-                throw new Exception("Channel authentication can only be used with private channels.");
+                throw new Exception("Channel authentication can only be used with private and presence channels.");
             }
 
             if (socketID == null || socketID.Trim() == "")
@@ -91,6 +91,29 @@ namespace PushRadar
                 throw new Exception("There was a problem receiving a channel authentication token. Server returned: " + response["body"]);
             }
 
+        }
+
+        public async Task<bool> RegisterClientDataAsync(string socketID, object clientData)
+        {
+            if (socketID == null || socketID.Trim() == "")
+            {
+                throw new Exception("Socket ID empty. Please pass through a socket ID.");
+            }
+
+            var response = await this.DoHTTPRequestAsync("POST", this.apiEndpoint + "/client-data", new Dictionary<string, object>
+            {
+                { "socketID", socketID },
+                { "clientData", JsonConvert.SerializeObject(clientData) }
+            });
+
+            if ((int)response["status"] == 200)
+            {
+                return true;
+            }
+            else
+            {
+                throw new Exception("An error occurred while calling the API. Server returned: " + response["body"]);
+            }
         }
 
         private async Task<Dictionary<string, object>> DoHTTPRequestAsync(string method, string url, Dictionary<string, object> data)

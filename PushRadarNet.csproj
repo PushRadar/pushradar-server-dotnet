@@ -11,10 +11,10 @@
     <PackageProjectUrl>https://pushradar.com</PackageProjectUrl>
     <PackageIconURL>https://pushradar.com/images/favicon/favicon-196x196.png</PackageIconURL>
     <RepositoryUrl>https://github.com/pushradar/pushradar-server-dotnet</RepositoryUrl>
-    <PackageReleaseNotes>[NEW] Updated for release of PushRadar v3</PackageReleaseNotes>
+    <PackageReleaseNotes>[NEW] Added support for client data registration</PackageReleaseNotes>
     <Description>PushRadar's official .NET server library</Description>
     <Authors>PushRadar</Authors>
-    <Version>3.0.0</Version>
+    <Version>3.1.0</Version>
     <PackageLicenseURL>https://raw.githubusercontent.com/pushradar/pushradar-server-dotnet/master/LICENSE</PackageLicenseURL>
     <PackageTags>pushradar, realtime, real-time, real time, websockets, channels</PackageTags>
   </PropertyGroup>
